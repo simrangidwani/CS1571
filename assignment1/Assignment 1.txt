@@ -1,0 +1,151 @@
+Assignment 1
+Assigned: 9/16/19
+Due: 10/9/19
+This assignment is intended to give you practice in implementing some of the concepts we have been discussing in class. You will be given code that implements the pseudocode in the textbook, and be asked to adapt it in a variety of ways.
+Logistics
+	This is an individual assignment. You may talk about it in general terms with your classmates, but your work should represent your individual work.
+	Written portions of the assignment should be filled in as part of this document, and should be submitted on Gradescope. Your code should be submitted on CourseWeb
+	The program you submit should be named: *last-name*-cs1571-a1.py
+	Assume for all parts that the input is well-formed
+
+Part A. Sudoku & Complexity (50 points)
+1.	Create a function named “sudokuSolver”. This function should take as inputs:
+	A string representing a sudoku grid of two possible sizes: 2x2 (containing the digits 1 through 4) and 3x3 (containing the digits 1 through 9). Each grid is represented by a string where a digit denotes a filled cell and a ‘.’ denotes an empty cell. The string is intended to fill in the Sudoku grid from left to right and top to bottom. For example, “...1.13..32.2...” is displayed as:
+. . | . 1
+. 1| 3 .
+----+-----
+. 3| 2 .
+2 .| . .
+	A string representing one of the three algorithms that you are planning to run as input: “bfs”, “dfs”, or “backtracking”.
+
+Run BFS (tree search), DFS (tree search), and backtracking on the three grids found in exampleSudokus-q1.txt. You should implement naïve versions of BFS and DFS, in that they can choose the variables to fill one by one, but should not use any heuristics to determine which numbers are legal to fill in. For backtracking, use minimum-remaining-values, least-constraining-value, and forward checking. 
+
+With each Sudoku board, your program should output a number of different factors to a file:
+a.	The solution to the puzzle as a String in the same format as the input string.
+b.	Total number of nodes created (or in the case of backtracking, the number of assignments tried)
+c.	The maximum number of nodes kept in memory at a time (ignore in the case of backtracking)
+d.	The running time of the search, using the Python time library (time.time())
+To help you, we’ve provided you with the code that comes along with the textbook, which includes a representation of Sudoku in csp.py. You’ll notice that Sudoku subclasses both CSP and Problem, and so it is fairly easy to call the different search methods on it right out of the box.
+Here are the key elements of this task:
+	Figure out how to call the methods provided by the textbook.
+	Make the modifications needed to output the correct counts. 
+	Make the modifications needed to run naïve BFS and DFS on the Sudoku puzzle.
+	Modify the Sudoku representation to reflect the 2x2 board size. This will also make it easier to test your code.
+Use the output of your program to fill in the table below.
+Algorithm	Board	#nodes generated /assignments made	max nodes stored	Running time
+BFS	1			
+BFS	2			
+BFS	3			
+DFS	1			
+DFS	2			
+DFS	3			
+Backtracking	1		N/A	
+Backtracking	2		N/A	
+Backtracking	3		N/A	
+
+2.	Does the running time and space used by BFS and DFS align with the complexity analysis presented in the textbook? Explain your reasoning.
+
+
+3.	In the table, why does it not make sense to fill in the max nodes stored for Backtracking?
+
+4.	Next, run your program on exampleSudokus-q2.txt, which contains sudokus with a 3x3 grid, testing the following three algorithms
+a.	Backtracking with minimum remaining values and least constrained values heuristic (“backtracking-ordered”).
+b.	Backtracking with no value and variable ordering (“backtracking-noOrdering”).
+c.	Backtracking with heuristics reversed – try the least constraining variable and most constraining value (“backtracking-reverse”).
+It is your choice whether to use forward checking inference or AC-3. a and b are implemented for you, but c will require a new implementation. You should modify your Sudoku solver implementation to take the above three Strings as possible values for your algorithms parameter. 
+Algorithm	Board	# assignments made	Running time
+Backtracking-ordered	1		
+Backtracking-ordered	2		
+Backtracking-ordered	3		
+“backtracking-noOrdering”	1		
+“backtracking-noOrdering”	2		
+“backtracking-noOrdering”	3		
+“backtracking-reverse”	1		
+“backtracking-reverse”	2		
+“backtracking-reverse”	3		
+
+
+
+
+5.	Did you choose to use forward checking or AC-3. Why did you make that decision? Reference principles learned in this course.
+
+6.	Are your results what you would have expected to see? Explain with reference to the # of assignments made and running time.
+
+
+
+Part B. Class Scheduling (50 points)
+We will now move to a different constraint satisfaction problem; the problem of scheduling classes. Initially, this problem is subject to the following conditions:
+	The same teacher can’t teach two different classes at the same time
+	Two different sections of the same class shouldn’t be scheduled at the same time.
+	Classes in the same area shouldn’t be scheduled at the same time.
+	Note: don’t worry about the labs and recitations, just the main sections of the courses
+Implement a scheduleCourses function that takes two parameters:
+	The name of an input file consisting of the courses to be scheduled
+	A number of possible “slots” for the courses
+For example, if possible class days were M/W or T/Th, and class can start at 9:30AM, 11AM, 12:30PM, 2PM, or 3:30PM, the number of possible time slots is 10.
+The input file is formatted as follows:
+Course number; course name; sections; labs; recitations; (professors);(sections each professor teaches), (areas) 
+Items in parentheses represent lists that could have 0 or more items.
+ 
+Here are two example lines of the input file. You’ll notice that there are no areas listed for the second line, but multiple professors with multiple sections (for example, K. Bigrigg teaches 3 sections).
+CS1571;Introduction to Artificial Intelligence;1;0;0;E. Walker;1;AI,DS
+CS0007;Introduction to Computer Programming;5;0;2;J.Cooper, K.Bigrigg, S. Ellis;1,3,1;
+
+Represent this problem as a CSP by answering the following questions.
+7.	What are the variables:
+
+
+8.	What are the domains of each variable:
+
+
+
+
+9.	What are the constraints:
+
+
+
+
+Run a backtracking search (using mrv, a degree heuristic, and lcv) with AC-3 inference on this problem to output to a file a viable schedule to this problem, given the file and number of timeslots. Your file should consist of a series of course number and timeslot pairs (CS1571, 0), separated by semicolons.
+This requires two modifications to the existing codebase:
+-	The implementation and use of a class that extends CSP and sets up the variables, domains, and constraints for the course scheduling problem
+-	The implementation of the degree heuristic function, named “degree”
+We will be providing a sample input file for you to test your code on named partB-courseList-shortened.txt.
+
+ 
+Part C. Navigating Around Campus (50 points)
+Finally, in the last part of this assignment, you will use A* to find the quickest path between two intersections on campus, given location and elevation data. It will be up to you to decide how to define shortest, and to make sure your heuristics work with the definition that you make.
+Implement a findPath function that takes a two intersection names as inputs, and an algorithm to use (either Astar or idAstar). Intersection names are formatted as follows: “Forbes,Bouquet”. Your goal is to find the path between two intersections that will have the quickest walking time. findPath should output the recommended route and expected time, given the algorithm provided. 
+To accomplish this, you will need data on walking routes around campus. We will give you two files. The first is called partC-intersections.txt. It contains latitutde, longitude, and elevation data for each intersection. Each line of the file is formatted as follows:
+Forbes,Bouquet,40.4420,-79.9564,279
+Forbes and Bouquet are the cross streets, 40.4420 is the latitude, -79.9564 is the longitude, and 279 is the elevation in meters. 
+The other file is named partC-distances.txt and contains distances for each route between intersections in miles. It is formatted as follows:
+Forbes,Bouquet,Forbes,Bigelow,0.18
+The two intersections are Forbes & Bouquet and Forbes & Bigelow, and the distance is .18 miles.
+You can assume that the elevation difference between each intersection represents the pedestrian’s path (e.g., moving from an intersection at 240m to an intersection at 239m means the pedestrian is traveling downhill 1m). It is your responsibility to do the conversions between intersections’ latitude and longitude coordinates, distances in miles, and expected time of travel (incorporating elevation into account). 
+The output of your function should be formatted as follows:
+Forbes,Bouquet,Forbes,Bigelow,Forbes,Bellefield,10
+The pedestrian is traveling from Forbes & Bouquet to Forbes & Bigelow to Forbes & Bellefield, and it is expected to take 10 minutes.
+Answer the questions on the following page.
+ 
+10.	Design a heuristic function for use with A* that incorporates both distance and elevation information. What is your function?
+
+
+
+
+
+
+
+
+
+11.	Why do you believe this is a good heuristic? Reference whether it is admissible and consistent in your answer.
+
+
+
+
+
+
+
+
+
+12.	Run both A* and iterative deepening A* with findPath (this will require you to implement iterative deepening A*). Do the two algorithms return different results? Why or why not?
+

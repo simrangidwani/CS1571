@@ -1,0 +1,33 @@
+def computeProb():
+    fullJoint = probability.JointProbDist(['ProblemSize', 'ConversationLength'])
+    fullJoint[dict(ProblemSize="Small", ConversationLength="Short")] = .40
+    fullJoint[dict(ProblemSize="Small", ConversationLength="Medium")] = .40
+    #fullJoint[dict(ProblemSize="Small", ConversationLength="Long")] = .10
+    fullJoint[dict(ProblemSize="Big", ConversationLength="Short")] = .20
+    fullJoint[dict(ProblemSize="Big", ConversationLength="Medium")] = .30
+    #fullJoint[dict(ProblemSize="Big", ConversationLength="Long")] = .50
+    evidence = dict(ProblemSize="Small", ConversationLength="Short")
+    variables = []
+    ans1 = probability.enumerate_joint(variables, evidence, fullJoint)
+    print(ans1)
+    evidence1 = dict(ProblemSize="Small")
+    variables1 = ["ConversationLength"]
+    ans2 = probability.enumerate_joint(variables1, evidence1, fullJoint)
+    print(ans2)
+
+
+    
+    # problemSize_node = probability.BayesNode('ProblemSize', '', 0.90)
+    # accurate_node = probability.BayesNode('Accurate', '', 0.90)
+    # conversationSmall_node = probability.BayesNode('ConversationLengthSmall', ['ProblemSize'],
+    #                                           {(T, T): 0.40, (T, F): 0.20})
+    # conversationMedium_node = probability.BayesNode('ConversationLengthMedium', ['ProblemSize'],
+    #                                                 {(T, T): 0.40, (T, F): 0.30})
+    # conversationLong_node = probability.BayesNode('ConversationLengthLong', ['ProblemSize'],
+    #                                               {(T, T): 0.20, (T, F): 0.50})
+    # resolved_node = probability.BayesNode('Resolved', ['ConversationLengthSmall', 'ConversationLengthMedium', 'ConversationLengthLong', 'Accurate'],
+    #                                       {(T, F, F, T): 0.30, (T, F, F, F): 0.20, (F, T, F, T): 0.50, (F, T, F, F): 0.30, (F, F, T, T): 0.70, (F, F, T, F): 0.40})
+    # frustrated_node = probability.BayesNode('Frustrated', ['ProblemSize', 'ConversationLengthSmall', 'ConversationLengthMedium', 'ConversationLengthLong', 'Accurate'],
+    #                                         {(T, T, F, F, T): 0.20, (T, T, F, F, T): 0.40, (T, F, T, F, T): 0.30, (T, F, T, F, F): 0.50, (T, F, F, T, T): 0.60,
+    #                                          (T, F, F, T, F): 0.80, (F, T, F, F, T): 0.30, (F, T, F, F, F): 0.50, (F, F, T, F, T): 0.60, (F, F, T, F, F): 0.80,
+    #                                          (F, F, F, T, T): 0.70, (F, F, F, T, F): 0.90})
